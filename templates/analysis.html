@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excel File Analysis</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Análisis de Archivo Excel</h1>
+    
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <h2>Archivo</h2>
+    <p>{{ stats.filename if stats and 'filename' in stats else 'Cargar Archivo' }}</p>
+
+    {% if stats %}
+    <h2>Detalles</h2>
+    <p>Filas: {{ stats.total_rows }}</p>
+    <p>Valores: ${{ "{:,.2f}".format(stats.total_value) }}</p>
+    <p>Valores Promedio: ${{ "{:,.2f}".format(stats.average_value) }}</p>
+    <p>Nulos: {{ stats.null_values }}</p>
+
+    <h2>Datos</h2>
+    <table>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                {% for column in columns %}
+                <td>{{ row[column] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <h2>Cargar Archivo</h2>
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('excel.analyze_excel') }}">
+        <input type="file" name="file" accept=".xlsx,.xls">
+        <input type="submit" value="Analizar">
+    </form>
+</body>
+</html>
