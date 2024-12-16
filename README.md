@@ -1,4 +1,6 @@
-# Excel Analysis MVC Application
+# Analyxcel
+
+Excel Analysis MVC Application
 
 ## Setup Instructions
 
